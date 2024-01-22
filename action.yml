@@ -54,9 +54,10 @@ runs:
         gistID: ${{ inputs.coverage-gist-id }}
         filename: coverage.json
         label: Test coverage
-        message: ${{ steps.collect-total-coverage.outputs.total_coverage }}
+        message: ${{ steps.collect-total-coverage.outputs.total_coverage }}%
         minColorRange: ${{ inputs.min-color-range }}
         maxColorRange: ${{ inputs.max-color-range }}
+        valColorRange: ${{ steps.collect-total-coverage.outputs.total_coverage }}
 
     - name: Fix permissions
       if: ${{ inputs.deploy-pages }} == 'true'
