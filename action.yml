@@ -35,10 +35,6 @@ outputs:
     description: Total test coverage in percentage
     value: ${{ steps.collect-total-coverage.outputs.total_coverage }}
 
-environment:
-  name: github-pages
-  url: ${{ steps.deploy.outputs.page_url }}
-
 runs:
   using: "composite"
   steps:
