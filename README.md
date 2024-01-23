@@ -1,2 +1,2 @@
-# test-and-upload-coverage
-Action to run tests and upload a coverage report as well as creating a coverage badge, without giving third parties access to your repository.
+# Manual Coverage Badge
+A composite action to manually create a coverage badge for a repository, using [`pytest-cov`](https://pytest-cov.readthedocs.io/en/latest/readme.html) with the [shields.io](https://shields.io/) service.
