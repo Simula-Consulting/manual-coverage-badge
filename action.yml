@@ -74,7 +74,3 @@ runs:
       with:
         name: github-pages
         path: htmlcov
-
-    - name: Deploy to GitHub Pages
-      if: ${{ inputs.deploy-pages }} == 'true'
-      uses: actions/deploy-pages@v4
