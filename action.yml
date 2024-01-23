@@ -5,10 +5,6 @@ inputs:
     description: 'Path to directory containing the coverage reports'
     required: false
     default: './'
-  deploy-pages:
-    description: 'Flag to deploy coverage report to GitHub Pages'
-    required: false
-    default: 'false'
 
   coverage-gist-token:
     description: 'Token for the Gist to update the coverage badge'
