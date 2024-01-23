@@ -62,7 +62,6 @@ runs:
         valColorRange: ${{ steps.collect-total-coverage.outputs.total_coverage }}
 
     - name: Fix permissions
-      if: ${{ inputs.deploy-pages }} == 'true'
       run: |
         chmod -c -R +rX "htmlcov" | while read line; do
           echo "::warning title=Invalid file permissions automatically fixed::$line"
@@ -70,7 +69,6 @@ runs:
       shell: bash
 
     - name: Upload coverage report as artifact
-      if: ${{ inputs.deploy-pages }} == 'true'
       id: upload-coverage-report
       uses: actions/upload-pages-artifact@v3
       with:
