@@ -36,6 +36,10 @@ outputs:
     description: Total test coverage in percentage
     value: ${{ steps.collect-total-coverage.outputs.total_coverage }}
 
+  artifact_id:
+    description: "The ID of the artifact that was uploaded."
+    value: ${{ steps.upload-pages-artifact.outputs.artifact-id }}
+
 runs:
   using: "composite"
   steps:
@@ -69,7 +73,7 @@ runs:
       shell: bash
 
     - name: Upload coverage report as artifact
-      id: upload-coverage-report
+      id: upload-pages-artifact
       uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages
