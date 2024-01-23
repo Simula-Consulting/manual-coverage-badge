@@ -35,6 +35,10 @@ outputs:
     description: Total test coverage in percentage
     value: ${{ steps.collect-total-coverage.outputs.total_coverage }}
 
+environment:
+  name: github-pages
+  url: ${{ steps.deploy.outputs.page_url }}
+
 runs:
   using: "composite"
   steps:
@@ -69,7 +73,12 @@ runs:
       
     - name: Upload coverage report as artifact
       if: ${{ inputs.deploy-pages }} == 'true'
+      id: upload-coverage-report
       uses: actions/upload-pages-artifact@v3
       with:
         name: github-pages
         path: htmlcov
+
+    - name: Deploy to GitHub Pages
+      if: ${{ inputs.deploy-pages }} == 'true'
+      uses: actions/deploy-pages@v4
