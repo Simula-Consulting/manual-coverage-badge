@@ -54,7 +54,7 @@ runs:
       with:
         auth: ${{ inputs.coverage-gist-token }}
         gistID: ${{ inputs.coverage-gist-id }}
-        filename: ${{ inputs.report-path }}/${{ inputs.coverage-json }}
+        filename: ${{ inputs.coverage-json }}
         label: Test coverage
         message: ${{ steps.collect-total-coverage.outputs.total_coverage }}%
         minColorRange: ${{ inputs.min-color-range }}
