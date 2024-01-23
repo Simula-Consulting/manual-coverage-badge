@@ -1,30 +1,35 @@
-name: Test and export coverage
-description: An action to run pytest and export code coverage.
+name: Manual badge creation
+description: An action to collect coverage report and create a badge.
 inputs:
-  report-path:
-    description: 'Path to directory containing the coverage reports'
+  coverage-json:
+    description: "Name of json coverage report"
     required: false
-    default: './'
+    default: "coverage.json"
+
+  report-path:
+    description: "Path to directory containing the coverage reports"
+    required: false
+    default: "."
 
   coverage-gist-token:
-    description: 'Token for the Gist to update the coverage badge'
+    description: "Token for the Gist to update the coverage badge"
     required: false
-    default: ''
+    default: ""
 
   coverage-gist-id:
-    description: 'Gist ID for the coverage badge'
+    description: "Gist ID for the coverage badge"
     required: false
-    default: ''
+    default: ""
 
   min-color-range:
-    description: 'Minimum color range for coverage badge'
+    description: "Minimum color range for coverage badge"
     required: false
-    default: '50'
+    default: "50"
 
   max-color-range:
-    description: 'Maximum color range for coverage badge'
+    description: "Maximum color range for coverage badge"
     required: false
-    default: '90'
+    default: "90"
 
 outputs:
   total_coverage:
@@ -38,17 +43,18 @@ runs:
       id: collect-total-coverage
       run: |
         export REPORTPATH=${{ inputs.report-path }}
-        export TOTAL_COVERAGE=$(jq -r .totals.percent_covered_display $REPORTPATH/coverage.json)
+        export COVERAGEJSON=${{ inputs.coverage-json }}
+        export TOTAL_COVERAGE=$(jq -r .totals.percent_covered_display $REPORTPATH/$COVERAGEJSON)
         echo "total_coverage=$TOTAL_COVERAGE" >> $GITHUB_OUTPUT
       shell: bash
-    
+
     - name: Make coverage badge
       if: ${{ inputs.coverage-gist-token }} != '' && ${{ inputs.coverage-gist-id }} != ''
       uses: schneegans/dynamic-badges-action@v1.7.0
       with:
         auth: ${{ inputs.coverage-gist-token }}
         gistID: ${{ inputs.coverage-gist-id }}
-        filename: coverage.json
+        filename: ${{ inputs.report-path }}/${{ inputs.coverage-json }}
         label: Test coverage
         message: ${{ steps.collect-total-coverage.outputs.total_coverage }}%
         minColorRange: ${{ inputs.min-color-range }}
@@ -62,7 +68,7 @@ runs:
           echo "::warning title=Invalid file permissions automatically fixed::$line"
         done
       shell: bash
-      
+
     - name: Upload coverage report as artifact
       if: ${{ inputs.deploy-pages }} == 'true'
       id: upload-coverage-report
