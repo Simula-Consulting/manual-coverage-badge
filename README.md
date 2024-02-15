@@ -42,7 +42,7 @@ jobs:
     steps:
       # ...
       - name: Run tests
-        run: poetry run pytest --cov=<package_name> --cov-report html --cov-report json:<package_name>_coverage.json
+        run: poetry run pytest --cov=<package_name> --cov-report json:<package_name>_coverage.json
 
       - name: Create coverage badge
         uses: simula-consulting/manual-coverage-badge@v1
@@ -57,10 +57,18 @@ The badge will be created and can be found at:
 https://img.shields.io/endpoint?url=https://gist.githubusercontent.com/<username>/<gist-id>/raw/<your_package>_coverage.json
 ```
 
-### Deploy the full coverage report to Github pages
-This action will automatically store an `html` artifact with the full coverage report. You can deploy this to Github pages easily with the [`actions/deploy-pages`](https://github.com/actions/deploy-pages) workflow.
+## 🎉 Bonus -  How to deploy the full coverage report to Github pages
+If you want to upload a full coverage report to GitHub pages (for example linked to your coverage badge), you can do so relatively easily by adding a few steps.
 
-Here is an example workflow:
+1. Add  the `--cov-report html` flag when running `pytest`. This will store a folder called `htmlcov` with the full coverage report
+2. Upload the `htmlcov` folder as an artifact using [`actions/upload-artifact@v4`](https://github.com/actions/upload-artifact)
+3. Deploy the artifact to Github pages using  [`actions/deploy-pages`](https://github.com/actions/deploy-pages) (make sure you have GitHub Pages enabled in your repository settings)
+
+Note that you need to fix permissions to read and upload the coverage report. 
+
+Following the recommended approach from the documentation, this is an example workflow for deploying the coverage report to Github pages:
+
+
 ```yaml
 jobs:
   test:
@@ -76,6 +84,12 @@ jobs:
           coverage-json: <package_name>_coverage.json
           coverage-gist-token: ${{ secrets.GIST_TOKEN }}
           coverage-gist-id: ${{ secrets.GIST_ID }}
+
+      - name: Fix permissions for htmlcov
+        run: |
+          chmod -c -R +rX "htmlcov" | while read line; do
+              echo "::warning title=Invalid file permissions automatically fixed::$line"
+          done
   
   deploy:
     needs: test
