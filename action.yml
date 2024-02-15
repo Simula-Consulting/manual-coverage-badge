@@ -36,10 +36,6 @@ outputs:
     description: Total test coverage in percentage
     value: ${{ steps.collect-total-coverage.outputs.total_coverage }}
 
-  artifact_id:
-    description: "The ID of the artifact that was uploaded."
-    value: ${{ steps.upload-pages-artifact.outputs.artifact-id }}
-
 runs:
   using: "composite"
   steps:
