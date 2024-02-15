@@ -64,17 +64,3 @@ runs:
         minColorRange: ${{ inputs.min-color-range }}
         maxColorRange: ${{ inputs.max-color-range }}
         valColorRange: ${{ steps.collect-total-coverage.outputs.total_coverage }}
-
-    - name: Fix permissions
-      run: |
-        chmod -c -R +rX "htmlcov" | while read line; do
-          echo "::warning title=Invalid file permissions automatically fixed::$line"
-        done
-      shell: bash
-
-    - name: Upload coverage report as artifact
-      id: upload-pages-artifact
-      uses: actions/upload-pages-artifact@v3
-      with:
-        name: github-pages
-        path: htmlcov
